@@ -31,24 +31,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.raywenderlich.android.jetreddit.viewmodel
+package com.example.jetreddit.viewmodel
 
 import android.os.Bundle
 import androidx.lifecycle.AbstractSavedStateViewModelFactory
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.savedstate.SavedStateRegistryOwner
+import com.example.jetreddit.data.repository.Repository
 
+@Suppress("UNCHECKED_CAST")
 class MainViewModelFactory(
     owner: SavedStateRegistryOwner,
-    private val defaultArgs: Bundle? = null
+    private val repository: Repository,
+    defaultArgs: Bundle? = null
 ) : AbstractSavedStateViewModelFactory(owner, defaultArgs) {
 
-  override fun <T : ViewModel?> create(
-      key: String,
-      modelClass: Class<T>,
-      handle: SavedStateHandle
-  ): T {
-    return MainViewModel() as T
-  }
+    override fun <T : ViewModel?> create(
+        key: String,
+        modelClass: Class<T>,
+        handle: SavedStateHandle
+    ): T {
+        return MainViewModel(repository) as T
+    }
 }

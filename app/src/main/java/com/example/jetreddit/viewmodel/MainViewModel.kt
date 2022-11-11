@@ -31,9 +31,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.raywenderlich.android.jetreddit.viewmodel
+package com.example.jetreddit.viewmodel
 
 import androidx.lifecycle.ViewModel
+import com.example.jetreddit.data.repository.Repository
 
-class MainViewModel : ViewModel() {
+class MainViewModel(private val repository: Repository) : ViewModel() {
+    val allPosts by lazy { repository.getAllPosts() }
+    val myPosts by lazy { repository.getAllOwnedPosts() }
 }
