@@ -31,7 +31,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.raywenderlich.android.jetreddit.screens
+package com.example.jetreddit.screens
 
 import androidx.compose.runtime.Composable
 
@@ -39,3 +39,21 @@ import androidx.compose.runtime.Composable
 fun MyProfileScreen() {
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

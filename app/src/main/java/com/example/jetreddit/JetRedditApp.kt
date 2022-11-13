@@ -51,9 +51,10 @@ import com.example.jetreddit.ui.theme.JetRedditTheme
 import com.example.jetreddit.routing.JetRedditRouter
 import com.example.jetreddit.routing.Screen
 import com.example.jetreddit.screens.AddScreen
+import com.example.jetreddit.screens.ChooseCommunityScreen
 import com.example.jetreddit.screens.HomeScreen
 import com.example.jetreddit.viewmodel.MainViewModel
-import com.raywenderlich.android.jetreddit.screens.MyProfileScreen
+import com.example.jetreddit.screens.MyProfileScreen
 import com.example.jetreddit.screens.SubredditsScreen
 //import com.example.jetreddit.routing.JetRedditRouter
 //import com.example.jetreddit.routing.Screen
@@ -152,8 +153,9 @@ private fun MainScreenContainer(
         when (screenState.value) {
             Screen.Home -> HomeScreen(viewModel)
             Screen.Subscriptions -> SubredditsScreen()
-            Screen.NewPost -> AddScreen()
+            Screen.NewPost -> AddScreen(viewModel)
             Screen.MyProfile -> MyProfileScreen()
+            Screen.ChooseCommunity -> ChooseCommunityScreen(viewModel)
         }
     }
 }

@@ -5,7 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import com.example.jetreddit.viewmodel.MainViewModel
-import com.raywenderlich.android.jetreddit.JetRedditApplication
 import com.example.jetreddit.viewmodel.MainViewModelFactory
 
 class MainActivity : ComponentActivity() {

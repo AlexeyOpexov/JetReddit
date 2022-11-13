@@ -48,6 +48,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.jetreddit.R
+import com.example.jetreddit.routing.BackButtonAction
 import com.example.jetreddit.routing.JetRedditRouter
 import com.example.jetreddit.viewmodel.MainViewModel
 import kotlinx.coroutines.Job
@@ -60,46 +61,120 @@ private val defaultCommunities = listOf("raywenderlich", "androiddev", "puppies"
 
 @Composable
 fun ChooseCommunityScreen(viewModel: MainViewModel, modifier: Modifier = Modifier) {
-  //TODO Add your code here
+    val scope = rememberCoroutineScope()
+    val communities: List<String> by viewModel.subreddits.observeAsState(emptyList())
+    var searchedText by remember { mutableStateOf("") }
+    var currentJob by remember { mutableStateOf<Job?>(null) }
+    val activeColor = MaterialTheme.colors.onSurface
+
+    LaunchedEffect(Unit) {
+        viewModel.searchCommunities(searchedText)
+    }
+
+    Column {
+        ChooseCommunityTopBar()
+
+        TextField(
+            value = searchedText,
+            onValueChange = {
+                searchedText = it
+                currentJob?.cancel()
+                currentJob = scope.async {
+                    delay(SEARCH_DELAY_MILLIS)
+                    viewModel.searchCommunities(searchedText)
+                }
+            },
+            leadingIcon = {
+                Icon(Icons.Default.Search, contentDescription = stringResource(id = R.string.search))
+
+            },
+            label = { Text(stringResource(R.string.search)) },
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = activeColor,
+                unfocusedLabelColor = activeColor,
+                cursorColor = activeColor,
+                backgroundColor = MaterialTheme.colors.surface
+            )
+        )
+
+        SearchedCommunities(communities, viewModel, modifier )
+    }
+
+    BackButtonAction {
+        JetRedditRouter.goBack()
+    }
 }
 
 @Composable
 fun SearchedCommunities(
-  communities: List<String>,
-  viewModel: MainViewModel?,
-  modifier: Modifier = Modifier
+    communities: List<String>,
+    viewModel: MainViewModel?,
+    modifier: Modifier = Modifier
 ) {
-  //TODO Add your code here
+    communities.forEach {
+        Community(
+            text = it,
+            modifier = modifier,
+            onCommunityClicked = {
+                // Устанавливаем выбранное комьюнити
+                viewModel?.selectedCommunity?.postValue(it)
+                // Закрываем экран
+                JetRedditRouter.goBack()
+            }
+        )
+    }
 }
 
 @Composable
 fun ChooseCommunityTopBar(modifier: Modifier = Modifier) {
 
-  val colors = MaterialTheme.colors
+    val colors = MaterialTheme.colors
 
-  TopAppBar(
-    title = {
-      Text(
-        fontSize = 16.sp,
-        text = stringResource(R.string.choose_community),
-        color = colors.primaryVariant
-      )
-    },
-    navigationIcon = {
-      IconButton(
-        onClick = { JetRedditRouter.goBack() }
-      ) {
-        Icon(
-          imageVector = Icons.Default.Close,
-          tint = colors.primaryVariant,
-          contentDescription = stringResource(id = R.string.close)
-        )
-      }
-    },
-    backgroundColor = colors.primary,
-    elevation = 0.dp,
-    modifier = modifier
-      .height(48.dp)
-      .background(Color.Blue)
-  )
+    TopAppBar(
+        title = {
+            Text(
+                fontSize = 16.sp,
+                text = stringResource(R.string.choose_community),
+                color = colors.primaryVariant
+            )
+        },
+        navigationIcon = {
+            IconButton(
+                onClick = { JetRedditRouter.goBack() }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Close,
+                    tint = colors.primaryVariant,
+                    contentDescription = stringResource(id = R.string.close)
+                )
+            }
+        },
+        backgroundColor = colors.primary,
+        elevation = 0.dp,
+        modifier = modifier
+            .height(48.dp)
+            .background(Color.Blue)
+    )
 }
+
+@Preview(showBackground = true)
+@Composable
+fun SearchedCommunitiesPreview() {
+    Column {
+        SearchedCommunities(defaultCommunities, null, Modifier)
+    }
+}
+
+
+
+
+
+
+
+
+
+
+

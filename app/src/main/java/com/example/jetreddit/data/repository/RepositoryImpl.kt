@@ -42,6 +42,9 @@ class RepositoryImpl(private val postDao: PostDao, private val mapper: DbMapper)
   override fun getAllPosts(): LiveData<List<PostModel>> = allPostsLiveData
 
   override fun getAllOwnedPosts(): LiveData<List<PostModel>> = ownedPostsLiveData
+  override fun getAllSubreddits(searchedText: String): List<String> {
+    TODO("Not yet implemented")
+  }
 
   private fun getAllPostsFromDatabase(): List<PostModel> =
     postDao.getAllPosts().map(mapper::mapPost)
