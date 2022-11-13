@@ -67,6 +67,7 @@ fun ChooseCommunityScreen(viewModel: MainViewModel, modifier: Modifier = Modifie
     var currentJob by remember { mutableStateOf<Job?>(null) }
     val activeColor = MaterialTheme.colors.onSurface
 
+    // События
     LaunchedEffect(Unit) {
         viewModel.searchCommunities(searchedText)
     }

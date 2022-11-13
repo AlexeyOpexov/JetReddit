@@ -48,11 +48,14 @@ import com.example.jetreddit.data.database.model.PostDbModel
 @Dao
 interface PostDao {
 
-  @Query("SELECT * FROM PostDbModel")
+  @Query("SELECT * FROM PostDbModel ORDER BY date_posted DESC")
   fun getAllPosts(): List<PostDbModel>
 
-  @Query("SELECT * FROM PostDbModel WHERE username = :username")
+  @Query("SELECT * FROM PostDbModel WHERE username = :username ORDER BY date_posted DESC")
   fun getAllOwnedPosts(username: String): List<PostDbModel>
+
+  @Query("SELECT DISTINCT subreddit FROM PostDbModel")
+  fun getAllSubreddits(): List<String>
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
   fun insert(postDbModel: PostDbModel)
