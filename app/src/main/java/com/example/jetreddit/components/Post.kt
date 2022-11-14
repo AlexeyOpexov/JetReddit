@@ -78,7 +78,7 @@ fun ImagePost(post: PostModel) {
 @Composable
 fun Post(post: PostModel, content: @Composable () -> Unit = {}) {
     Card(shape = MaterialTheme.shapes.large) {
-        Column(modifier =  Modifier.padding(top = 18.dp, bottom = 8.dp)) {
+        Column(modifier = Modifier.padding(top = 18.dp, bottom = 8.dp)) {
             Header(post)
             Spacer(modifier = Modifier.height(4.dp))
             content.invoke()
@@ -89,9 +89,13 @@ fun Post(post: PostModel, content: @Composable () -> Unit = {}) {
 }
 
 @Composable
-fun Header(post: PostModel) {
+fun Header(
+    post: PostModel,
+    onJoinButtonState: (Boolean) -> Unit = {}
+) {
     Row(
         modifier = Modifier.padding(start = 16.dp),
+        verticalAlignment = Alignment.CenterVertically,
         content = {
             Image(
                 ImageBitmap.imageResource(id = R.drawable.subreddit_placeholder),
@@ -100,25 +104,26 @@ fun Header(post: PostModel) {
                     .size(40.dp)
                     .clip(CircleShape)
             )
-            Spacer(modifier = Modifier.width(8.dp))
 
-            Column(
-                modifier = Modifier.weight(1f),
-                content = {
-                    Text(
-                        text = stringResource(R.string.subreddit_header, post.subreddit),
-                        fontWeight = FontWeight.Medium,
-                        color = MaterialTheme.colors.primaryVariant
-                    )
-                    Text(
-                        text = stringResource(R.string.post_header, post.username, post.postedTime),
-                        color = Color.Gray
-                    )
-                }
-            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = stringResource(R.string.subreddit_header, post.subreddit),
+                    fontWeight = FontWeight.Medium,
+                    color = MaterialTheme.colors.primaryVariant
+                )
+                Text(
+                    text = stringResource(R.string.post_header, post.username, post.postedTime),
+                    color = Color.Gray
+                )
+            }
+
+            Spacer(modifier = Modifier.width(4.dp))
+            JoinButton(onClick = onJoinButtonState)
             MoreActionsMenu()
         }
     )
+
     Title(text = post.title)
 }
 
